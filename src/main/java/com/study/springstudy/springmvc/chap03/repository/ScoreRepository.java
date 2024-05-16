@@ -22,4 +22,5 @@ public interface ScoreRepository {
 
     String ranking(Score score);
 
+    void remove(long stuNum);
 }

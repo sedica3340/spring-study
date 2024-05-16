@@ -56,12 +56,13 @@ public class ScoreController {
     }
     /*
     3. 성적정보 삭제 요청
-    - /score/remove : POST
+    - /score/remove : Get
     */
-    @PostMapping("/remove")
-    public String remove() {
-        System.out.println("score/remove : POST!");
-        return "";
+    @GetMapping("/remove")
+    public String remove(Long stuNum) {
+        System.out.println("score/remove : GET!");
+        repository.remove(stuNum);
+        return "redirect:/score/list";
     }
 
 
