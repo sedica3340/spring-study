@@ -26,7 +26,7 @@ public class ScoreController {
     - /score/list : GET
 */
     @GetMapping("/list")
-    public String list(Model model) {
+    public String list(String sort, Model model) {
         System.out.println("/score/list : GET!");
 
         List<Score> scoreList = repository.findAll();
