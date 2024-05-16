@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/score")
@@ -29,7 +31,20 @@ public class ScoreController {
     public String list(String sort, Model model) {
         System.out.println("/score/list : GET!");
 
-        List<Score> scoreList = repository.findAll();
+
+        List<Score> scoreList = repository.findAll().stream()
+                .sorted(Comparator.comparing(Score::getStuNum))
+                .collect(Collectors.toList());
+        if (sort.equals("name")) {
+            scoreList = scoreList.stream()
+                    .sorted(Comparator.comparing(Score::getStuName))
+                    .collect(Collectors.toList());
+        }
+        if (sort.equals("avg")) {
+            scoreList = scoreList.stream()
+                    .sorted(Comparator.comparing(Score::getAverage))
+                    .collect(Collectors.toList());
+        }
 
         model.addAttribute("sList", scoreList);
 
