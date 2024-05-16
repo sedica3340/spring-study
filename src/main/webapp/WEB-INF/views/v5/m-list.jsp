@@ -17,23 +17,23 @@
     
     <ul>        
        
-        <h1>프론트컨트롤러V4 목록보기</h1>
+        <h1>프론트컨트롤러V5 목록보기</h1>
 
         <c:forEach var="m" items="${memberList}">
             <li>
                 # 아이디: ${m.account},
-                <a href="/chap02/v4/detail?account=${m.account}">
+                <a href="/chap02/v5/detail?account=${m.account}">
                     이름: ${m.userName} 
                 </a> 
                 &nbsp;&nbsp;&nbsp;
-                <a id="rm-btn" href="/chap02/v4/delete?account=${m.account}">[delete]</a>
+                <a id="rm-btn" href="/chap02/v5/delete?account=${m.account}">[delete]</a>
 
             </li>
         </c:forEach>
 
     </ul>
 
-    <a href="/chap02/v4/join">새로운 회원가입하기</a>
+    <a href="/chap02/v5/join">새로운 회원가입하기</a>
 
 
     
