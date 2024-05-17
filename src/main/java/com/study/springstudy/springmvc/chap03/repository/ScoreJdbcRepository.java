@@ -10,7 +10,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Repository
+//@Repository
 public class ScoreJdbcRepository implements ScoreRepository {
     private String url = "jdbc:mariadb://localhost:3306/spring5";
     private String username = "root";
