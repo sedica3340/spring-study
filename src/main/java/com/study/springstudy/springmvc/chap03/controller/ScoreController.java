@@ -4,6 +4,9 @@ package com.study.springstudy.springmvc.chap03.controller;
 import com.study.springstudy.springmvc.chap03.dto.ScorePostDto;
 import com.study.springstudy.springmvc.chap03.entity.Score;
 import com.study.springstudy.springmvc.chap03.repository.ScoreJdbcRepository;
+import com.study.springstudy.springmvc.chap03.repository.ScoreRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,11 +19,17 @@ import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/score")
+@RequiredArgsConstructor
 public class ScoreController {
 
     // 의존객체 설정
-    private ScoreJdbcRepository repository = new ScoreJdbcRepository();
+    private final ScoreRepository repository;
 
+    // lombok 으로 생성시킴
+//    @Autowired
+//    public ScoreController(ScoreRepository repository) {
+//        this.repository = repository;
+//    }
 
     /*
     # 요청 URL
@@ -31,10 +40,13 @@ public class ScoreController {
     public String list(String sort, Model model) {
         System.out.println("/score/list : GET!");
 
+        List<Score> scoreList = repository.findAll();
 
-        List<Score> scoreList = repository.findAll().stream()
-                .sorted(Comparator.comparing(Score::getStuNum))
-                .collect(Collectors.toList());
+        if(sort == null) sort = "";
+
+        if (sort.equals("num")) {
+            scoreList = repository.findAll();
+        }
         if (sort.equals("name")) {
             scoreList = scoreList.stream()
                     .sorted(Comparator.comparing(Score::getStuName))
@@ -69,6 +81,7 @@ public class ScoreController {
 
         return "redirect:/score/list";
     }
+
     /*
     3. 성적정보 삭제 요청
     - /score/remove : Get

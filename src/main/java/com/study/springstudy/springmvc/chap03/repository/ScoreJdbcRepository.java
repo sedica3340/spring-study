@@ -1,6 +1,8 @@
 package com.study.springstudy.springmvc.chap03.repository;
 
 import com.study.springstudy.springmvc.chap03.entity.Score;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -8,6 +10,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Repository
 public class ScoreJdbcRepository implements ScoreRepository {
     private String url = "jdbc:mariadb://localhost:3306/spring5";
     private String username = "root";
