@@ -3,6 +3,7 @@ package com.study.springstudy.springmvc.chap03.controller;
 
 import com.study.springstudy.springmvc.chap03.dto.ScoreDetailResponseDto;
 import com.study.springstudy.springmvc.chap03.dto.ScoreListResponseDto;
+import com.study.springstudy.springmvc.chap03.dto.ScoreModifyRequestDto;
 import com.study.springstudy.springmvc.chap03.dto.ScorePostDto;
 import com.study.springstudy.springmvc.chap03.entity.Score;
 import com.study.springstudy.springmvc.chap03.repository.ScoreJdbcRepository;
@@ -104,4 +105,21 @@ public class ScoreController {
 
         return "score/score-detail";
     }
+
+    @GetMapping("/modify")
+    public String modify(long stuNum, Model model) {
+        ScoreDetailResponseDto dto = service.retrieve(stuNum);
+        model.addAttribute("s", dto);
+
+        return "score/score-modify";
+    }
+    @PostMapping("/modify")
+    public String postModify(ScoreModifyRequestDto dto) {
+        // 1. 수정을 원하는 새로운 데이터 읽기
+        service.update(dto);
+
+        return "redirect:/score/detail?stuNum=" + dto.getStuNum();
+    }
+
+
 }

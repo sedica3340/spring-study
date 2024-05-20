@@ -23,4 +23,10 @@ public interface ScoreRepository {
     String ranking(Score score);
 
     boolean remove(long stuNum);
+
+
+    // 저장소에서 국영수 점수 수정하기
+    default boolean updateScore(Score s) {
+        return false;
+    }
 }
