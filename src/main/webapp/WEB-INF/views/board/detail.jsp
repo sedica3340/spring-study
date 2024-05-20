@@ -111,7 +111,7 @@
     <h1>${b.boardNo}번 게시물 내용~ </h1>
     <h2># 작성일자: ${b.regDateTime}</h2>
     <label for="title">${b.title}</label>
-    <input type="text" id="title" name="title" value="메롱롱" readonly>
+    <input type="text" id="title" name="title" value="${b.writer}" readonly>
     <label for="content">내용</label>
     <div id="content">${b.content}</div>
     <div class="buttons">

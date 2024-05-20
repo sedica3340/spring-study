@@ -52,7 +52,7 @@ public class ScoreJdbcRepository implements ScoreRepository {
     }
 
     @Override
-    public List<Score> findAll() {
+    public List<Score> findAll(String sort) {
         List<Score> scoreList = new ArrayList<>();
         try (Connection conn = connect()) {
             String sql = "SELECT * FROM tbl_score";
@@ -98,7 +98,7 @@ public class ScoreJdbcRepository implements ScoreRepository {
 
     @Override
     public String ranking(Score score) {
-        List<Score> scoreList = findAll();
+        List<Score> scoreList = findAll("num");
         List<Score> rankingList = scoreList.stream()
                 .sorted(Comparator.comparing(Score::getAverage).reversed())
                 .collect(Collectors.toList());
@@ -115,7 +115,7 @@ public class ScoreJdbcRepository implements ScoreRepository {
     }
 
     @Override
-    public void remove(long stuNum) {
+    public boolean remove(long stuNum) {
         try (Connection conn = connect()) {
             String sql = "DELETE FROM tbl_score WHERE stu_Num = ?";
             PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -128,6 +128,7 @@ public class ScoreJdbcRepository implements ScoreRepository {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return false;
     }
 
     private Connection connect() throws SQLException {

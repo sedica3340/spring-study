@@ -41,10 +41,10 @@
             <div class="time-view-wrapper">
               <div class="time">
                 <i class="far fa-clock"></i>
-                  ${b.regDateTime}</div>
+                  ${b.date}</div>
               <div class="view">
                 <i class="fas fa-eye"></i>
-                <span class="view-count">${b.viewCount}</span>
+                <span class="view-count">${b.view}</span>
               </div>
             </div>
           </div>
@@ -83,8 +83,8 @@
      }
   });
   document.querySelectorAll("div.card-content").forEach(c => {
-    if (c.textContent.length >= 10) {
-        c.textContent = c.textContent.substr(0, 8) + "...";
+    if (c.textContent.length >= 15) {
+        c.textContent = c.textContent.substr(0, 13) + "...";
     }
   });
 

@@ -12,7 +12,7 @@ public interface ScoreRepository {
 
 
     // 저장소에서 데이터 전체조회하기
-    List<Score> findAll();
+    List<Score> findAll(String sort);
     // 저장소에서 데이터 개별조회하기
 
     Score findOne(Long stuNum);
@@ -22,5 +22,5 @@ public interface ScoreRepository {
 
     String ranking(Score score);
 
-    void remove(long stuNum);
+    boolean remove(long stuNum);
 }

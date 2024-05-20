@@ -26,9 +26,26 @@ public class ScoreSpringJdbcRepository implements ScoreRepository{
     }
 
     @Override
-    public List<Score> findAll() {
+    public List<Score> findAll(String sort) {
         String sql = "SELECT * FROM tbl_score";
-        return template.query(sql, (rs,rowNum) -> new Score(rs));
+
+        List<Score> scoreList = template.query(sql, (rs, rowNum) -> new Score(rs));
+        if(sort == null) sort = "";
+
+        if (sort.equals("num")) {
+            scoreList = scoreList;
+        }
+        if (sort.equals("name")) {
+            scoreList = scoreList.stream()
+                    .sorted(Comparator.comparing(Score::getStuName))
+                    .collect(Collectors.toList());
+        }
+        if (sort.equals("avg")) {
+            scoreList = scoreList.stream()
+                    .sorted(Comparator.comparing(Score::getAverage))
+                    .collect(Collectors.toList());
+        }
+        return scoreList;
     }
 
     @Override
@@ -40,7 +57,7 @@ public class ScoreSpringJdbcRepository implements ScoreRepository{
 
     @Override
     public String ranking(Score score) {
-        List<Score> scoreList = findAll();
+        List<Score> scoreList = findAll("avg");
         List<Score> rankingList = scoreList.stream()
                 .sorted(Comparator.comparing(Score::getAverage).reversed())
                 .collect(Collectors.toList());
@@ -57,9 +74,9 @@ public class ScoreSpringJdbcRepository implements ScoreRepository{
     }
 
     @Override
-    public void remove(long stuNum) {
+    public boolean remove(long stuNum) {
         String sql = "DELETE FROM tbl_score WHERE stu_Num = ?";
-        template.update(sql, stuNum);
+        return template.update(sql, stuNum) == 1;
 
     }
 }

@@ -1,5 +1,7 @@
 package com.study.springstudy.springmvc.chap04.controller;
 
+import com.study.springstudy.springmvc.chap04.dto.BoardDetailResponseDto;
+import com.study.springstudy.springmvc.chap04.dto.BoardListResponseDto;
 import com.study.springstudy.springmvc.chap04.dto.BoardPostDto;
 import com.study.springstudy.springmvc.chap04.entity.Board;
 import com.study.springstudy.springmvc.chap04.repositroy.BoardRepository;
@@ -10,7 +12,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/board")
@@ -24,7 +28,12 @@ public class BoardController {
     @GetMapping("/list")
     public String list(Model model) {
         List<Board> boardList = repository.findAll();
-        model.addAttribute("bList", boardList);
+
+        List<BoardListResponseDto> bList = boardList.stream()
+                .map(BoardListResponseDto::new)
+                .collect(Collectors.toList());
+
+        model.addAttribute("bList", bList);
         return "board/list";
     }
 
@@ -56,8 +65,11 @@ public class BoardController {
     // 5. 게시글 상세 조회 요청 (/board/detail :GET)
     @GetMapping("/detail")
     public String detail(int boardNo, Model model) {
+
         Board board = repository.findOne(boardNo);
-        model.addAttribute("b",board);
+        BoardDetailResponseDto b = new BoardDetailResponseDto(board);
+
+        model.addAttribute("b",b);
         repository.addShowCount(boardNo);
         return "board/detail";
     }

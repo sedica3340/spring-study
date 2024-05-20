@@ -1,10 +1,13 @@
 package com.study.springstudy.springmvc.chap03.controller;
 
 
+import com.study.springstudy.springmvc.chap03.dto.ScoreDetailResponseDto;
+import com.study.springstudy.springmvc.chap03.dto.ScoreListResponseDto;
 import com.study.springstudy.springmvc.chap03.dto.ScorePostDto;
 import com.study.springstudy.springmvc.chap03.entity.Score;
 import com.study.springstudy.springmvc.chap03.repository.ScoreJdbcRepository;
 import com.study.springstudy.springmvc.chap03.repository.ScoreRepository;
+import com.study.springstudy.springmvc.chap03.service.ScoreService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,6 +27,7 @@ public class ScoreController {
 
     // 의존객체 설정
     private final ScoreRepository repository;
+    private final ScoreService service;
 
     // lombok 으로 생성시킴
 //    @Autowired
@@ -40,25 +44,12 @@ public class ScoreController {
     public String list(String sort, Model model) {
         System.out.println("/score/list : GET!");
 
-        List<Score> scoreList = repository.findAll();
+//        List<Score> scoreList = repository.findAll(sort);
+        List<ScoreListResponseDto> dtos = service.getList(sort);
 
-        if(sort == null) sort = "";
 
-        if (sort.equals("num")) {
-            scoreList = repository.findAll();
-        }
-        if (sort.equals("name")) {
-            scoreList = scoreList.stream()
-                    .sorted(Comparator.comparing(Score::getStuName))
-                    .collect(Collectors.toList());
-        }
-        if (sort.equals("avg")) {
-            scoreList = scoreList.stream()
-                    .sorted(Comparator.comparing(Score::getAverage))
-                    .collect(Collectors.toList());
-        }
 
-        model.addAttribute("sList", scoreList);
+        model.addAttribute("sList", dtos);
 
         return "score/score-list";
     }
@@ -75,9 +66,10 @@ public class ScoreController {
 
 
         // 데이터베이스 저장 위임..
-        Score score = new Score(dto);
+//        Score score = new Score(dto);
 
-        repository.save(score);
+//        repository.save(score);
+        service.insert(dto);
 
         return "redirect:/score/list";
     }
@@ -89,7 +81,8 @@ public class ScoreController {
     @GetMapping("/remove")
     public String remove(Long stuNum) {
         System.out.println("score/remove : GET!");
-        repository.remove(stuNum);
+//        repository.remove(stuNum);
+        service.deleteScore(stuNum);
         return "redirect:/score/list";
     }
 
@@ -104,11 +97,10 @@ public class ScoreController {
 
         // 1. 상세조회를 원하는 학번을 읽기
         // 2. DB에 상세조회 요청
-        Score score = repository.findOne(stuNum);
+        ScoreDetailResponseDto dto = service.retrieve(stuNum);
         // 3. DB에서 조회한 회원정보 JSP에게 전달
-        String rank = repository.ranking(score);
-        model.addAttribute("s", score);
-        model.addAttribute("rank", rank);
+        model.addAttribute("s", dto);
+//        model.addAttribute("rank", rank);
 
         return "score/score-detail";
     }
