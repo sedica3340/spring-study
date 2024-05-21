@@ -15,9 +15,8 @@ import com.study.springstudy.springmvc.chap03.dto.ScoreListResponseDto;
 import com.study.springstudy.springmvc.chap03.dto.ScoreModifyRequestDto;
 import com.study.springstudy.springmvc.chap03.dto.ScorePostDto;
 import com.study.springstudy.springmvc.chap03.entity.Score;
-import com.study.springstudy.springmvc.chap03.repository.ScoreRepository;
+import com.study.springstudy.springmvc.chap03.mapper.ScoreMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,8 +26,8 @@ import java.util.stream.Collectors;
 @Service
 public class ScoreService {
 
-    private final ScoreRepository repository;
-
+//    private final ScoreRepository repository;
+    private final ScoreMapper repository;
     // 목록 조회 중간처리
     // - DB에서 조회한 성적정보 목록은 민감한정보를 모두 포함하고 있는데
     //   이를 컨트롤러에게 직접 넘기면 보안상 불필요한 정보까지 화면으로
@@ -37,7 +36,7 @@ public class ScoreService {
         List<Score> scoreList = repository.findAll(sort);
 
         return scoreList.stream()
-                .map(s -> new ScoreListResponseDto(s))
+                .map(ScoreListResponseDto::new)
                 .collect(Collectors.toList());
     }
 
@@ -58,7 +57,7 @@ public class ScoreService {
         return new ScoreDetailResponseDto(score, rank);
     }
 
-    public void update(ScoreModifyRequestDto dto) {
-        repository.updateScore(new Score(dto));
+    public boolean update(ScoreModifyRequestDto dto) {
+         return repository.updateScore(new Score(dto));
     }
 }
