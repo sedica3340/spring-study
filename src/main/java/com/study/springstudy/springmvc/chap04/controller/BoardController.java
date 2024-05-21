@@ -28,13 +28,7 @@ public class BoardController {
     // 1. 목록 조회 요청 (/board/list : GET)
     @GetMapping("/list")
     public String list(Model model) {
-        List<Board> boardList = service.getList();
-
-        List<BoardListResponseDto> bList = boardList.stream()
-                .map(BoardListResponseDto::new)
-                .collect(Collectors.toList());
-
-        model.addAttribute("bList", bList);
+        model.addAttribute("bList", service.getList());
         return "board/list";
     }
 
@@ -49,8 +43,7 @@ public class BoardController {
     // -> 목록조회 요청 리다이렉션
     @PostMapping("/write")
     public String register(BoardPostDto dto) {
-        Board board = new Board(dto);
-        service.insert(board);
+        service.insert(new Board(dto));
         return "redirect:/board/list";
     }
 
@@ -58,7 +51,6 @@ public class BoardController {
     // -> 목록조회 요청 리다이렉션
     @GetMapping("/delete")
     public String remove(int boardNo) {
-//        System.out.println("보드넘버는" + boardNo);
         service.deleteBoard(boardNo);
         return "redirect:/board/list";
     }
@@ -67,10 +59,7 @@ public class BoardController {
     @GetMapping("/detail")
     public String detail(int boardNo, Model model) {
 
-        Board board = service.search(boardNo);
-        BoardDetailResponseDto b = new BoardDetailResponseDto(board);
-
-        model.addAttribute("b",b);
+        model.addAttribute("b", service.search(boardNo));
         service.addViewCount(boardNo);
         return "board/detail";
     }

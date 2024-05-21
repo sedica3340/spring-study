@@ -1,11 +1,14 @@
 package com.study.springstudy.springmvc.chap04.service;
 
+import com.study.springstudy.springmvc.chap04.dto.BoardDetailResponseDto;
+import com.study.springstudy.springmvc.chap04.dto.BoardListResponseDto;
 import com.study.springstudy.springmvc.chap04.entity.Board;
 import com.study.springstudy.springmvc.chap04.mapper.BoardMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -13,8 +16,10 @@ public class BoardService {
 
     private final BoardMapper mapper;
 
-    public List<Board> getList() {
-        return mapper.findAll();
+    public List<BoardListResponseDto> getList() {
+        return mapper.findAll().stream()
+                .map(BoardListResponseDto::new)
+                .collect(Collectors.toList());
     }
 
     public boolean insert(Board board) {
@@ -25,8 +30,8 @@ public class BoardService {
         return mapper.delete(boardNo);
     }
 
-    public Board search(int boardNo) {
-        return mapper.findOne(boardNo);
+    public BoardDetailResponseDto search(int boardNo) {
+        return new BoardDetailResponseDto(mapper.findOne(boardNo));
     }
 
     public void addViewCount(int boardNo) {
