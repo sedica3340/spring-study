@@ -5,6 +5,7 @@ import com.study.springstudy.springmvc.chap04.dto.BoardListResponseDto;
 import com.study.springstudy.springmvc.chap04.dto.BoardPostDto;
 import com.study.springstudy.springmvc.chap04.entity.Board;
 import com.study.springstudy.springmvc.chap04.repositroy.BoardRepository;
+import com.study.springstudy.springmvc.chap04.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,13 +22,13 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class BoardController {
 
-    private final BoardRepository repository;
-
+//    private final BoardRepository repository;
+    private final BoardService service;
 
     // 1. 목록 조회 요청 (/board/list : GET)
     @GetMapping("/list")
     public String list(Model model) {
-        List<Board> boardList = repository.findAll();
+        List<Board> boardList = service.getList();
 
         List<BoardListResponseDto> bList = boardList.stream()
                 .map(BoardListResponseDto::new)
@@ -49,7 +50,7 @@ public class BoardController {
     @PostMapping("/write")
     public String register(BoardPostDto dto) {
         Board board = new Board(dto);
-        repository.save(board);
+        service.insert(board);
         return "redirect:/board/list";
     }
 
@@ -58,7 +59,7 @@ public class BoardController {
     @GetMapping("/delete")
     public String remove(int boardNo) {
 //        System.out.println("보드넘버는" + boardNo);
-        repository.delete(boardNo);
+        service.deleteBoard(boardNo);
         return "redirect:/board/list";
     }
 
@@ -66,11 +67,11 @@ public class BoardController {
     @GetMapping("/detail")
     public String detail(int boardNo, Model model) {
 
-        Board board = repository.findOne(boardNo);
+        Board board = service.search(boardNo);
         BoardDetailResponseDto b = new BoardDetailResponseDto(board);
 
         model.addAttribute("b",b);
-        repository.addShowCount(boardNo);
+        service.addViewCount(boardNo);
         return "board/detail";
     }
 }
