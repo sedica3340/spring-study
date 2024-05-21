@@ -17,6 +17,10 @@ public class BoardService {
     private final BoardMapper mapper;
 
     public List<BoardListResponseDto> getList() {
+
+        // 조회해온 게시물 리스트에서 각 게시물들의 조회수를 확인하여
+        // 조회수가 5 이상인 게시물에 특정 마킹을 한다
+
         return mapper.findAll().stream()
                 .map(BoardListResponseDto::new)
                 .collect(Collectors.toList());

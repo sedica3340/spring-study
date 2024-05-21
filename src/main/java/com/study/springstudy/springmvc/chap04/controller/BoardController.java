@@ -33,6 +33,7 @@ public class BoardController {
     }
 
 
+
     // 2. 글쓰기 양식 화면 열기 요청 (/board/write : GET)
     @GetMapping("/write")
     public String write() {
@@ -58,7 +59,6 @@ public class BoardController {
     // 5. 게시글 상세 조회 요청 (/board/detail :GET)
     @GetMapping("/detail")
     public String detail(int boardNo, Model model) {
-
         model.addAttribute("b", service.search(boardNo));
         service.addViewCount(boardNo);
         return "board/detail";

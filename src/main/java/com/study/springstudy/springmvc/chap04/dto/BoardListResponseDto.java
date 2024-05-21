@@ -18,6 +18,8 @@ public class BoardListResponseDto {
     private String content;
     private String date;
     private int view;
+    private boolean hit;
+    private boolean newArticle;
 
 
     public BoardListResponseDto(Board b) {
@@ -26,6 +28,8 @@ public class BoardListResponseDto {
         this.content = b.getContent();
         this.date = dateFormatting(b.getRegDateTime());
         this.view = b.getViewCount();
+        this.hit = b.getViewCount() >= 5;
+        this.newArticle = !(b.getRegDateTime().plusHours(1).isBefore(LocalDateTime.now()));
     }
 
     private String dateFormatting(LocalDateTime regDateTime) {
