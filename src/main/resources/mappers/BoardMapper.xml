@@ -9,6 +9,8 @@
     <select id="findAll" resultType="board">
         SELECT *
         FROM tbl_board
+        ORDER BY board_no DESC
+        LIMIT #{pageStart}, #{amount}
     </select>
 
     <select id="findOne" resultType="board">
@@ -31,7 +33,13 @@
     <update id="addShowCount">
         UPDATE tbl_board
         SET view_count = view_count + 1
+        WHERE board_no = #{boardNo}
     </update>
+
+    <select id="count" resultType="int">
+        SELECT COUNT(*)
+        FROM tbl_board
+    </select>
 
 
 

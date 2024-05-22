@@ -1,5 +1,7 @@
 package com.study.springstudy.springmvc.chap04.controller;
 
+import com.study.springstudy.springmvc.chap04.common.Page;
+import com.study.springstudy.springmvc.chap04.common.PageMaker;
 import com.study.springstudy.springmvc.chap04.dto.BoardDetailResponseDto;
 import com.study.springstudy.springmvc.chap04.dto.BoardListResponseDto;
 import com.study.springstudy.springmvc.chap04.dto.BoardPostDto;
@@ -27,8 +29,11 @@ public class BoardController {
 
     // 1. 목록 조회 요청 (/board/list : GET)
     @GetMapping("/list")
-    public String list(Model model) {
-        model.addAttribute("bList", service.getList());
+    public String list(Model model, Page page) {
+        // 페이지 정보를 생성하여 jsp에게 전송
+
+        model.addAttribute("bList", service.getList(page));
+        model.addAttribute("maker", new PageMaker(page, service.getCount()));
         return "board/list";
     }
 
