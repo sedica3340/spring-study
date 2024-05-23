@@ -2,6 +2,7 @@ package com.study.springstudy.springmvc.chap04.controller;
 
 import com.study.springstudy.springmvc.chap04.common.Page;
 import com.study.springstudy.springmvc.chap04.common.PageMaker;
+import com.study.springstudy.springmvc.chap04.common.Search;
 import com.study.springstudy.springmvc.chap04.dto.BoardDetailResponseDto;
 import com.study.springstudy.springmvc.chap04.dto.BoardListResponseDto;
 import com.study.springstudy.springmvc.chap04.dto.BoardPostDto;
@@ -12,9 +13,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,11 +32,10 @@ public class BoardController {
 
     // 1. 목록 조회 요청 (/board/list : GET)
     @GetMapping("/list")
-    public String list(Model model, Page page) {
+    public String list(Model model, Search page) {
         // 페이지 정보를 생성하여 jsp에게 전송
-
         model.addAttribute("bList", service.getList(page));
-        model.addAttribute("maker", new PageMaker(page, service.getCount()));
+        model.addAttribute("maker", new PageMaker(page, service.getCount(page)));
         return "board/list";
     }
 
@@ -63,9 +65,11 @@ public class BoardController {
 
     // 5. 게시글 상세 조회 요청 (/board/detail :GET)
     @GetMapping("/detail")
-    public String detail(int boardNo, Model model) {
+    public String detail(int boardNo, Model model, HttpServletRequest request) {
         model.addAttribute("b", service.search(boardNo));
         service.addViewCount(boardNo);
+        String ref = request.getHeader("Referer");
+        model.addAttribute("ref", ref);
         return "board/detail";
     }
 }

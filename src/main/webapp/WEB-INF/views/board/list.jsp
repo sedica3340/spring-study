@@ -53,44 +53,85 @@ uri="http://java.sun.com/jsp/jstl/core" %>
                 <button class="add-btn">새 글 쓰기</button>
             </div>
 
+            <div class="top-section">
+                <!-- 검색창 영역 -->
+                <div class="search">
+                    <form action="/board/list" method="get">
+                        <input type="hidden" name="amount" value="${maker.pageInfo.amount}">
+                        <select
+                            class="form-select"
+                            name="type"
+                            id="search-type"
+                        >
+                            <option value="title">제목</option>
+                            <option value="content">내용</option>
+                            <option value="writer">작성자</option>
+                            <option value="tc">제목+내용</option>
+                        </select>
+
+                        <input
+                            type="text"
+                            class="form-control"
+                            name="keyword"
+                            value="${maker.pageInfo.keyword}"
+                        />
+
+                        <button class="btn btn-primary" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </form>
+                </div>
+                <div class="amount">
+                    <div><a href="/board/list?pageNo=1&type=${maker.pageInfo.type}&keyword=${maker.pageInfo.keyword}&amount=6">6</a></div>
+                    <div><a href="/board/list?pageNo=1&type=${maker.pageInfo.type}&keyword=${maker.pageInfo.keyword}&amount=18">18</a></div>
+                    <div><a href="/board/list?pageNo=1&type=${maker.pageInfo.type}&keyword=${maker.pageInfo.keyword}&amount=30">30</a></div>
+                </div>
+            </div>
             <div class="card-container">
-                <c:forEach var="b" items="${bList}">
-                    <div class="card-wrapper">
-                        <section class="card" data-bno="${b.boardNo}">
-                            <div class="card-title-wrapper">
-                                <h2 class="card-title">${b.title}</h2>
-                                <div class="time-view-wrapper">
-                                    <div class="time">
-                                        <i class="far fa-clock"></i>
-                                        ${b.date}
-                                    </div>
-                                    <c:if test="${b.hit}">
-                                        <div class="hit">HIT</div>
-                                    </c:if>
-                                    <c:if test="${b.newArticle}">
-                                        <div class="hit">NEW</div>
-                                    </c:if>
-                                    <div class="view">
-                                        <i class="fas fa-eye"></i>
-                                        <span class="view-count"
-                                            >${b.view}</span
-                                        >
+                <c:if test="${bList.size() == 0}">
+                    <div class="empty">
+                        검색한 게시물이 존재하지 않습니다.
+                    </div>
+                </c:if>
+                <c:if test="${bList.size() > 0}">
+                    <c:forEach var="b" items="${bList}">
+                        <div class="card-wrapper">
+                            <section class="card" data-bno="${b.boardNo}">
+                                <div class="card-title-wrapper">
+                                    <h2 class="card-title">${b.title}</h2>
+                                    <div class="time-view-wrapper">
+                                        <div class="time">
+                                            <i class="far fa-clock"></i>
+                                            ${b.date}
+                                        </div>
+                                        <c:if test="${b.hit}">
+                                            <div class="hit">HIT</div>
+                                        </c:if>
+                                        <c:if test="${b.newArticle}">
+                                            <div class="hit">NEW</div>
+                                        </c:if>
+                                        <div class="view">
+                                            <i class="fas fa-eye"></i>
+                                            <span class="view-count"
+                                                >${b.view}</span
+                                            >
+                                        </div>
                                     </div>
                                 </div>
+                                <div class="card-content">${b.content}</div>
+                            </section>
+                            <div class="card-btn-group">
+                                <button
+                                    class="del-btn"
+                                    data-href="/board/delete?boardNo=${b.boardNo}"
+                                >
+                                    <i class="fas fa-times"></i>
+                                </button>
                             </div>
-                            <div class="card-content">${b.content}</div>
-                        </section>
-                        <div class="card-btn-group">
-                            <button
-                                class="del-btn"
-                                data-href="/board/delete?boardNo=${b.boardNo}"
-                            >
-                                <i class="fas fa-times"></i>
-                            </button>
                         </div>
-                    </div>
-                    <!-- end div.card-wrapper -->
-                </c:forEach>
+                        <!-- end div.card-wrapper -->
+                    </c:forEach>
+                </c:if>
             </div>
             <!-- end div.card-container -->
             <!-- 게시글 목록 하단 영역 -->
@@ -98,13 +139,59 @@ uri="http://java.sun.com/jsp/jstl/core" %>
                 <!-- 페이지 버튼 영역 -->
                 <nav aria-label="Page navigation example">
                     <ul class="pagination pagination-lg pagination-custom">
-                        <c:forEach var="i" begin="${maker.begin}" end="${maker.end}">
+                        <c:if test="${maker.pageInfo.pageNo != 1}">
+                            <li class="page-item">
+                                <a
+                                    class="page-link"
+                                    href="/board/list?pageNo=1&type=${maker.pageInfo.type}&keyword=${maker.pageInfo.keyword}"
+                                    >&lt;&lt;</a
+                                >
+                            </li>
+                        </c:if>
+                        <c:if test="${maker.prev}">
+                            <li class="page-item">
+                                <a
+                                    class="page-link"
+                                    href="/board/list?pageNo=${maker.begin-1}&type=${maker.pageInfo.type}&keyword=${maker.pageInfo.keyword}"
+                                    >prev</a
+                                >
+                            </li>
+                        </c:if>
+
+                        <c:forEach
+                            var="i"
+                            begin="${maker.begin}"
+                            end="${maker.end}"
+                        >
                             <li data-page-num="${i}" class="page-item">
-                                <a class="page-link" href="/board/list?pageNo=${i}"
-                                >${i}</a
+                                <a
+                                    class="page-link"
+                                    href="/board/list?pageNo=${i}&type=${maker.pageInfo.type}&keyword=${maker.pageInfo.keyword}"
+                                    >${i}</a
                                 >
                             </li>
                         </c:forEach>
+
+                        <c:if test="${maker.next}">
+                            <li class="page-item">
+                                <a
+                                    class="page-link"
+                                    href="/board/list?pageNo=${maker.end+1}&type=${maker.pageInfo.type}&keyword=${maker.pageInfo.keyword}"
+                                    >next</a
+                                >
+                            </li>
+                        </c:if>
+                        <c:if
+                            test="${maker.pageInfo.pageNo != maker.finalPage}"
+                        >
+                            <li class="page-item">
+                                <a
+                                    class="page-link"
+                                    href="/board/list?pageNo=${maker.finalPage}&type=${maker.pageInfo.type}&keyword=${maker.pageInfo.keyword}"
+                                    >&gt;&gt;</a
+                                >
+                            </li>
+                        </c:if>
                     </ul>
                 </nav>
             </div>
@@ -128,6 +215,19 @@ uri="http://java.sun.com/jsp/jstl/core" %>
         </div>
 
         <script>
+            function fixSearchOption() {
+                const type = '${maker.pageInfo.type}';
+                document.querySelector(`#search-type option[value='\${type}']`)?.setAttribute('selected', 'selected');
+                
+
+            }
+            fixSearchOption();
+            document.querySelectorAll("li.page-item").forEach((t) => {
+                if (t.dataset.pageNum === "${maker.pageInfo.pageNo}") {
+                    t.classList.add("active");
+                }
+            });
+
             document.querySelectorAll("h2.card-title").forEach((t) => {
                 if (t.textContent.length >= 8) {
                     t.textContent = t.textContent.substr(0, 6) + "...";

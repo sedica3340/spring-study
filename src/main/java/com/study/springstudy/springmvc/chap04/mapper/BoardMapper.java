@@ -1,6 +1,7 @@
 package com.study.springstudy.springmvc.chap04.mapper;
 
 import com.study.springstudy.springmvc.chap04.common.Page;
+import com.study.springstudy.springmvc.chap04.common.Search;
 import com.study.springstudy.springmvc.chap04.entity.Board;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -10,7 +11,7 @@ import java.util.List;
 public interface BoardMapper {
 
     // 게시물 목록 조회
-    List<Board> findAll(Page page);
+    List<Board> findAll(Search page);
 
     // 게시물 상세 조회
     Board findOne(int boardNo);
@@ -24,5 +25,5 @@ public interface BoardMapper {
     void addShowCount(int boardNo);
 
     // 총 게시물 수 조회
-    int count();
+    int count(Search page);
 }
