@@ -21,6 +21,7 @@ reg_date_time DATETIME DEFAULT current_timestamp
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Board {
 
     private int boardNo; // 글번호

@@ -98,7 +98,7 @@ uri="http://java.sun.com/jsp/jstl/core" %>
                         <div class="card-wrapper">
                             <section class="card" data-bno="${b.boardNo}">
                                 <div class="card-title-wrapper">
-                                    <h2 class="card-title">${b.title}</h2>
+                                    <h2 class="card-title">${b.title} </h2><span class="reply-count">[${b.replyCount}]</span>
                                     <div class="time-view-wrapper">
                                         <div class="time">
                                             <i class="far fa-clock"></i>

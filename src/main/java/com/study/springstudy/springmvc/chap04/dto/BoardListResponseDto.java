@@ -20,16 +20,18 @@ public class BoardListResponseDto {
     private int view;
     private boolean hit;
     private boolean newArticle;
+    private int replyCount;
 
 
-    public BoardListResponseDto(Board b) {
-        this.boardNo = b.getBoardNo();
+    public BoardListResponseDto(BoardFindAllDto b) {
+        this.boardNo = (int)b.getBoardNo();
         this.title = b.getTitle();
         this.content = b.getContent();
         this.date = dateFormatting(b.getRegDateTime());
         this.view = b.getViewCount();
         this.hit = b.getViewCount() >= 5;
         this.newArticle = !(b.getRegDateTime().plusHours(1).isBefore(LocalDateTime.now()));
+        this.replyCount = b.getReplyCount();
     }
 
     private String dateFormatting(LocalDateTime regDateTime) {

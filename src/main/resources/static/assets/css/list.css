@@ -73,7 +73,7 @@
 }
 
 .card-container .card-wrapper .card-title-wrapper .card-title {
-    /* width: 50%; */
+    /* width: 80%; */
     font-size: 28px;
     font-weight: 700;
     padding: 15px;
@@ -85,7 +85,12 @@
     align-items: center;
 
 }
-
+/*.card-container .card-wrapper .card-title-wrapper .reply-count {
+    position: absolute;
+    right: 0%;
+    top: 30%;
+}
+*/
 .card-container .card .card-title-wrapper .time-view-wrapper {
     display: flex;
     justify-content: space-between;
