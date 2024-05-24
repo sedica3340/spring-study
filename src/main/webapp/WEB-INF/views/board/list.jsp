@@ -229,9 +229,12 @@ uri="http://java.sun.com/jsp/jstl/core" %>
             });
 
             document.querySelectorAll("h2.card-title").forEach((t) => {
-                if (t.textContent.length >= 8) {
-                    t.textContent = t.textContent.substr(0, 6) + "...";
+                if (t.textContent.length >= 10) {
+                    t.textContent = t.textContent.substr(0, 8) + "..." + t.nextElementSibling.textContent;
+                } else {
+                    t.textContent = t.textContent + t.nextElementSibling.textContent;
                 }
+                t.nextElementSibling.textContent = "";
             });
             document.querySelectorAll("div.card-content").forEach((c) => {
                 if (c.textContent.length >= 15) {
