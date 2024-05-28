@@ -40,10 +40,10 @@ public class BoardService {
 
     public BoardDetailResponseDto search(int boardNo) {
 
-        List<Reply> replies = replyMapper.findAll(boardNo);
+//        List<Reply> replies = replyMapper.findAll(boardNo);
 
         BoardDetailResponseDto dto = new BoardDetailResponseDto(boardMapper.findOne(boardNo));
-        dto.setReplies(replies);
+//        dto.setReplies(replies);
         return dto;
     }
 

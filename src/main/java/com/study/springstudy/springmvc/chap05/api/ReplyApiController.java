@@ -21,6 +21,7 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
+@CrossOrigin // CORS 정책 허용범위 설정
 public class ReplyApiController {
 
     private final ReplyService replyService;
@@ -42,7 +43,7 @@ public class ReplyApiController {
         log.info("/api/v1/replies/{} : GET", bno);
 
         List<ReplyDetailDto> replies = replyService.getReplies(bno);
-        log.debug("first reply : {}", replies.get(0));
+//        log.debug("first reply : {}", replies.get(0));
 
         return ResponseEntity
                 .ok()
@@ -92,4 +93,16 @@ public class ReplyApiController {
 
         return errors;
     }
+
+    // 삭제 처리 요청
+    @DeleteMapping("/{rno}")
+    public ResponseEntity<?> delete(@PathVariable long rno) {
+
+        List<ReplyDetailDto> dtoList = replyService.delete(rno);
+
+        return ResponseEntity
+                .ok()
+                .body(dtoList);
+    }
+
 }
