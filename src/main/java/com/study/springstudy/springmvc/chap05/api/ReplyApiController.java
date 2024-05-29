@@ -1,8 +1,10 @@
 package com.study.springstudy.springmvc.chap05.api;
 
 
+import com.study.springstudy.springmvc.chap04.common.Page;
 import com.study.springstudy.springmvc.chap05.dto.request.ReplyPostDto;
 import com.study.springstudy.springmvc.chap05.dto.response.ReplyDetailDto;
+import com.study.springstudy.springmvc.chap05.dto.response.ReplyListDto;
 import com.study.springstudy.springmvc.chap05.entity.Reply;
 import com.study.springstudy.springmvc.chap05.service.ReplyService;
 import lombok.RequiredArgsConstructor;
@@ -29,8 +31,10 @@ public class ReplyApiController {
     // 댓글 목록 조회 요청
     // URL : /api/vi/replies/원본글번호    - GET -> 목록조회
     // @PathVariable : URL에 붙어있는 변수값을 읽는 아노테이션@
-    @GetMapping("/{bno}")
-    public ResponseEntity<?> list(@PathVariable long bno) {
+    @GetMapping("/{bno}/page/{pageNo}")
+    public ResponseEntity<?> list(@PathVariable long bno
+        , @PathVariable int pageNo
+    ) {
 
         if (bno == 0) {
             String msg = "글 번호는 0번이 될 수 없습니다.";
@@ -42,7 +46,7 @@ public class ReplyApiController {
 
         log.info("/api/v1/replies/{} : GET", bno);
 
-        List<ReplyDetailDto> replies = replyService.getReplies(bno);
+        ReplyListDto replies = replyService.getReplies(bno, new Page(pageNo, 10));
 //        log.debug("first reply : {}", replies.get(0));
 
         return ResponseEntity
@@ -78,7 +82,7 @@ public class ReplyApiController {
         }
         return ResponseEntity
                 .ok()
-                .body(replyService.getReplies(dto.getBno()));
+                .body(replyService.getReplies(dto.getBno(), new Page(1, 10)));
     }
 
     private Map<String, String> makeValidationMessageMap(BindingResult result) {
@@ -98,7 +102,7 @@ public class ReplyApiController {
     @DeleteMapping("/{rno}")
     public ResponseEntity<?> delete(@PathVariable long rno) {
 
-        List<ReplyDetailDto> dtoList = replyService.delete(rno);
+        ReplyListDto dtoList = replyService.delete(rno);
 
         return ResponseEntity
                 .ok()
