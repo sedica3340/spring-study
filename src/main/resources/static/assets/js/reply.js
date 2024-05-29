@@ -29,3 +29,5 @@ document.querySelector("#newReplyWriter").addEventListener("keyup", (e) => {
 document.querySelector("#replyData").addEventListener("click", (e) => {
     replyDeleteEvent(e);
 });
+
+// 수정버튼 클릭 이벤트

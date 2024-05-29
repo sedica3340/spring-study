@@ -156,6 +156,8 @@ export async function fetchInfScrollReplies(pageNo = 1) {
         // 초기댓글 reset
         document.querySelector("#replyData").innerHTML = "";
         isFetching = false;
+        setupInfiniteScroll();
+
         hideSpinner();
     }
     // 댓글을 전부 가져올 시 스크롤 이벤트 제거하기
